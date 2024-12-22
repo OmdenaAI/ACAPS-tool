@@ -10,7 +10,6 @@ transformers==4.41.2
 scikit-learn==1.4.2
 reportlab==4.2.0
 apify_client==1.7.0
-numpy>=1.26.0
 kaleido==0.2.1
 pytrends
 torch==2.2.2
@@ -30,3 +29,4 @@ crewai-tools
 pyvis
 networkx
 spacy
+en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.5.0/en_core_web_sm-3.5.0-py3-none-any.whl
