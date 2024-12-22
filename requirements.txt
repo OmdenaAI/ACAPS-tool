@@ -24,4 +24,5 @@ streamlit-on-Hover-tabs==1.0.1
 apify_client
 folium
 langchain_groq
+gdelt
 
