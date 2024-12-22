@@ -11,7 +11,7 @@ pandas==2.2.2
 plotly==5.22.0
 requests==2.32.3
 scikit-learn==1.4.2
-spacy==3.8.2
+spacy
 streamlit==1.39.0
 tqdm==4.67.1
 transformers==4.41.2
