@@ -25,4 +25,5 @@ apify_client
 folium
 langchain_groq
 gdelt
+networkx
 
