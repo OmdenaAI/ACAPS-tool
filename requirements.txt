@@ -23,4 +23,5 @@ streamlit-lottie==0.0.5
 streamlit-on-Hover-tabs==1.0.1
 apify_client
 folium
+langchain_groq
 
