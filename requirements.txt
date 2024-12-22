@@ -21,4 +21,6 @@ st-pages==1.0.1
 streamlit==1.39.0
 streamlit-lottie==0.0.5
 streamlit-on-Hover-tabs==1.0.1
+apify_client
+folium
 
