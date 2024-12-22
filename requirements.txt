@@ -27,4 +27,5 @@ langchain_groq
 gdelt
 networkx
 pyvis
+en_core_web_sm
 
