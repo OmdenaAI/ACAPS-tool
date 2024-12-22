@@ -37,4 +37,3 @@ crewai-tools
 pyvis
 networkx
 spacy
-distutils
