@@ -26,4 +26,5 @@ folium
 langchain_groq
 gdelt
 networkx
+pyvis
 
