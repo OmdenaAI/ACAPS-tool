@@ -45,7 +45,7 @@ def home_page():
             if 'tts_enabled' in st.session_state:
                 tts_enabled = st.checkbox('Enable Voice Mode', value=st.session_state.tts_enabled)
             else:
-                tts_enabled = st.checkbox('Enable Voice Mode', value=True)
+                tts_enabled = st.checkbox('Enable Voice Mode', value=False)
 
     st.session_state.language = language
     st.session_state.tts_enabled = tts_enabled
