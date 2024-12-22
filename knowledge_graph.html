@@ -1,0 +1,250 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        
+            <script src="lib/bindings/utils.js"></script>
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/dist/vis-network.min.css" integrity="sha512-WgxfT5LWjfszlPHXRmBWHkV2eceiWTOBvrKCNbdgDYTHrT2AeLCGbF4sZlZw3UMN3WtL0tGUoIAKsu8mllg/XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/vis-network/9.1.2/dist/vis-network.min.js" integrity="sha512-LnvoEWDFrqGHlHmDD2101OrLcbsfkrzoSpvtSQtxK3RMnRV0eOkhhBN2dXHKRrUU8p2DGRTk35n4O8nWSVe1mQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+            
+        
+<center>
+<h1></h1>
+</center>
+
+<!-- <link rel="stylesheet" href="../node_modules/vis/dist/vis.min.css" type="text/css" />
+<script type="text/javascript" src="../node_modules/vis/dist/vis.js"> </script>-->
+        <link
+          href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css"
+          rel="stylesheet"
+          integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6"
+          crossorigin="anonymous"
+        />
+        <script
+          src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js"
+          integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf"
+          crossorigin="anonymous"
+        ></script>
+
+
+        <center>
+          <h1></h1>
+        </center>
+        <style type="text/css">
+
+             #mynetwork {
+                 width: 100%;
+                 height: 600px;
+                 background-color: #ffffff;
+                 border: 1px solid lightgray;
+                 position: relative;
+                 float: left;
+             }
+
+             
+             #loadingBar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width: 100%;
+                 height: 600px;
+                 background-color:rgba(200,200,200,0.8);
+                 -webkit-transition: all 0.5s ease;
+                 -moz-transition: all 0.5s ease;
+                 -ms-transition: all 0.5s ease;
+                 -o-transition: all 0.5s ease;
+                 transition: all 0.5s ease;
+                 opacity:1;
+             }
+
+             #bar {
+                 position:absolute;
+                 top:0px;
+                 left:0px;
+                 width:20px;
+                 height:20px;
+                 margin:auto auto auto auto;
+                 border-radius:11px;
+                 border:2px solid rgba(30,30,30,0.05);
+                 background: rgb(0, 173, 246); /* Old browsers */
+                 box-shadow: 2px 0px 4px rgba(0,0,0,0.4);
+             }
+
+             #border {
+                 position:absolute;
+                 top:10px;
+                 left:10px;
+                 width:500px;
+                 height:23px;
+                 margin:auto auto auto auto;
+                 box-shadow: 0px 0px 4px rgba(0,0,0,0.2);
+                 border-radius:10px;
+             }
+
+             #text {
+                 position:absolute;
+                 top:8px;
+                 left:530px;
+                 width:30px;
+                 height:50px;
+                 margin:auto auto auto auto;
+                 font-size:22px;
+                 color: #000000;
+             }
+
+             div.outerBorder {
+                 position:relative;
+                 top:400px;
+                 width:600px;
+                 height:44px;
+                 margin:auto auto auto auto;
+                 border:8px solid rgba(0,0,0,0.1);
+                 background: rgb(252,252,252); /* Old browsers */
+                 background: -moz-linear-gradient(top,  rgba(252,252,252,1) 0%, rgba(237,237,237,1) 100%); /* FF3.6+ */
+                 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(252,252,252,1)), color-stop(100%,rgba(237,237,237,1))); /* Chrome,Safari4+ */
+                 background: -webkit-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Chrome10+,Safari5.1+ */
+                 background: -o-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* Opera 11.10+ */
+                 background: -ms-linear-gradient(top,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* IE10+ */
+                 background: linear-gradient(to bottom,  rgba(252,252,252,1) 0%,rgba(237,237,237,1) 100%); /* W3C */
+                 filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fcfcfc', endColorstr='#ededed',GradientType=0 ); /* IE6-9 */
+                 border-radius:72px;
+                 box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+             }
+             
+
+             
+
+             
+        </style>
+    </head>
+
+
+    <body>
+        <div class="card" style="width: 100%">
+            
+            
+            <div id="mynetwork" class="card-body"></div>
+        </div>
+
+        
+            <div id="loadingBar">
+              <div class="outerBorder">
+                <div id="text">0%</div>
+                <div id="border">
+                  <div id="bar"></div>
+                </div>
+              </div>
+            </div>
+        
+        
+
+        <script type="text/javascript">
+
+              // initialize global variables.
+              var edges;
+              var nodes;
+              var allNodes;
+              var allEdges;
+              var nodeColors;
+              var originalNodes;
+              var network;
+              var container;
+              var options, data;
+              var filter = {
+                  item : '',
+                  property : '',
+                  value : []
+              };
+
+              
+
+              
+
+              // This method is responsible for drawing the graph, returns the drawn network
+              function drawGraph() {
+                  var container = document.getElementById('mynetwork');
+
+                  
+
+                  // parsing and collecting nodes and edges from the python
+                  nodes = new vis.DataSet([{"color": "#97c2fc", "id": "Christians", "label": "Christians", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "targeting", "label": "targeting", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Magdeburg", "label": "Magdeburg", "shape": "dot", "size": 10, "title": "GPE"}, {"color": "#97c2fc", "id": "bite", "label": "bite", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Germany", "label": "Germany", "shape": "dot", "size": 10, "title": "GPE"}, {"color": "#97c2fc", "id": "refused", "label": "refused", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "blames", "label": "blames", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "trying", "label": "trying", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "blame", "label": "blame", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "supports", "label": "supports", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Israel", "label": "Israel", "shape": "dot", "size": 10, "title": "GPE"}, {"color": "#97c2fc", "id": "60", "label": "60", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "injuring", "label": "injuring", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "muslims", "label": "muslims", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "hates", "label": "hates", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "CCTV", "label": "CCTV", "shape": "dot", "size": 10, "title": "ORG"}, {"color": "#97c2fc", "id": "watch", "label": "watch", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Europe", "label": "Europe", "shape": "dot", "size": 10, "title": "LOC"}, {"color": "#97c2fc", "id": "islamize", "label": "islamize", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "needs", "label": "needs", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Nazis", "label": "Nazis", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "Muslims", "label": "Muslims", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "revere", "label": "revere", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Jesus", "label": "Jesus", "shape": "dot", "size": 10, "title": "PERSON"}, {"color": "#97c2fc", "id": "hate", "label": "hate", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "heart", "label": "heart", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "goes", "label": "goes", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "breaking", "label": "breaking", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "I", "label": "I", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "end", "label": "end", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "stand", "label": "stand", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "seen", "label": "seen", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "wonder", "label": "wonder", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "persecution", "label": "persecution", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "https://t.co/6o7ZZU00n5", "label": "https://t.co/6o7ZZU00n5", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "invaded", "label": "invaded", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "group", "label": "group", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "market", "label": "market", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "terrorist", "label": "terrorist", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "used", "label": "used", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "kept", "label": "kept", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "provoked", "label": "provoked", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "car", "label": "car", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "drove", "label": "drove", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "ran", "label": "ran", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "say", "label": "say", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "people", "label": "people", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "kill", "label": "kill", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "killing", "label": "killing", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "attack", "label": "attack", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "hit", "label": "hit", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "hand", "label": "hand", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "that", "label": "that", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "feeds", "label": "feeds", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "wants", "label": "wants", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "happened", "label": "happened", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "you", "label": "you", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "know", "label": "know", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "agree", "label": "agree", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "who", "label": "who", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "lived", "label": "lived", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "K", "label": "K", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "\ufe0f#BREAKING", "label": "\ufe0f#BREAKING", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "ramming", "label": "ramming", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "has", "label": "has", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "says", "label": "says", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "committing", "label": "committing", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "unfolds", "label": "unfolds", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "showing", "label": "showing", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Abdulmohsen", "label": "Abdulmohsen", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "identified", "label": "identified", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "he", "label": "he", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "believes", "label": "believes", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "He", "label": "He", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "expresses", "label": "expresses", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "tendencies", "label": "tendencies", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "girls", "label": "girls", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "smuggling", "label": "smuggling", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "him", "label": "him", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "extradite", "label": "extradite", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "asylum", "label": "asylum", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "granted", "label": "granted", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "\ud83c\uddea", "label": "\ud83c\uddea", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "give", "label": "give", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Watch", "label": "Watch", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "pause", "label": "pause", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "administration", "label": "administration", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "allowed", "label": "allowed", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "terrorists", "label": "terrorists", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "hallmarks", "label": "hallmarks", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "war", "label": "war", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "@Kash_Patel", "label": "@Kash_Patel", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "have", "label": "have", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "work", "label": "work", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "cut", "label": "cut", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "what", "label": "what", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "means", "label": "means", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "thinks", "label": "thinks", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "intifada", "label": "intifada", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "globalize", "label": "globalize", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "This", "label": "This", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "appears", "label": "appears", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "STOP", "label": "STOP", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "place", "label": "place", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "taking", "label": "taking", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "We", "label": "We", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "need", "label": "need", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "system", "label": "system", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "change", "label": "change", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "media", "label": "media", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "You", "label": "You", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "let", "label": "let", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "border", "label": "border", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "\u2019s", "label": "\u2019s", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "religion", "label": "religion", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "guess", "label": "guess", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "me", "label": "me", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "get", "label": "get", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "reminds", "label": "reminds", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "this", "label": "this", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "prevent", "label": "prevent", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "footage", "label": "footage", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "shows", "label": "shows", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "emerged", "label": "emerged", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "sources", "label": "sources", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "claim", "label": "claim", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Thoughts", "label": "Thoughts", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "go", "label": "go", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "location", "label": "location", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "they", "label": "they", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "turn", "label": "turn", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "want", "label": "want", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "\u2019re", "label": "\u2019re", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "laugh", "label": "laugh", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "BELLE", "label": "BELLE", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "DISCOTHEQUE", "label": "DISCOTHEQUE", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "AMERICA", "label": "AMERICA", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "FORCE", "label": "FORCE", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "LIBYA", "label": "LIBYA", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "DESTROY", "label": "DESTROY", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "it", "label": "it", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "brings", "label": "brings", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "going", "label": "going", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "investigating", "label": "investigating", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "It", "label": "It", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "@elonmusk", "label": "@elonmusk", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "https://t.co/3meuIqGJGf", "label": "https://t.co/3meuIqGJGf", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "migrants", "label": "migrants", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "feed", "label": "feed", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Reports", "label": "Reports", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "stating", "label": "stating", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "genocide", "label": "genocide", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "immigration", "label": "immigration", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Terrorism", "label": "Terrorism", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "come", "label": "come", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "floodgate", "label": "floodgate", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "keeping", "label": "keeping", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "daughters", "label": "daughters", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "raped", "label": "raped", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "children", "label": "children", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "slaughtered", "label": "slaughtered", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Merkel", "label": "Merkel", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "sleeps", "label": "sleeps", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "fine", "label": "fine", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "WHY", "label": "WHY", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Why!#Terroristattack", "label": "Why!#Terroristattack", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "vehicle", "label": "vehicle", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "authorities", "label": "authorities", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "we", "label": "we", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "incident", "label": "incident", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "inmigration", "label": "inmigration", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Stop", "label": "Stop", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Murphy", "label": "Murphy", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "prayers", "label": "prayers", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Sending", "label": "Sending", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "https://t.co/My6INOkNWX", "label": "https://t.co/My6INOkNWX", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Let", "label": "Let", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "\u0027s", "label": "\u0027s", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "thing", "label": "thing", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Christ", "label": "Christ", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Prayers", "label": "Prayers", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "affected", "label": "affected", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Tragedy", "label": "Tragedy", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Authorities", "label": "Authorities", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "identity", "label": "identity", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "remain", "label": "remain", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Police", "label": "Police", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "arrest", "label": "arrest", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "doctor", "label": "doctor", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "case", "label": "case", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "borders", "label": "borders", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "HUMANS", "label": "HUMANS", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "EXECUTING", "label": "EXECUTING", "shape": "dot", "size": 10}, {"color": "#97c2fc", "id": "Christmas", "label": "Christmas", "shape": "dot", "size": 10, "title": "DATE"}, {"color": "#97c2fc", "id": "Few days ago", "label": "Few days ago", "shape": "dot", "size": 10, "title": "DATE"}, {"color": "#97c2fc", "id": "Syrians", "label": "Syrians", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "Essen", "label": "Essen", "shape": "dot", "size": 10, "title": "GPE"}, {"color": "#97c2fc", "id": "Today", "label": "Today", "shape": "dot", "size": 10, "title": "DATE"}, {"color": "#97c2fc", "id": "Saudi Arabian", "label": "Saudi Arabian", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "TerroristAttack", "label": "TerroristAttack", "shape": "dot", "size": 10, "title": "PERSON"}, {"color": "#97c2fc", "id": "today", "label": "today", "shape": "dot", "size": 10, "title": "DATE"}, {"color": "#97c2fc", "id": "Islamophobe", "label": "Islamophobe", "shape": "dot", "size": 10, "title": "ORG"}, {"color": "#97c2fc", "id": "Talib Al-Abdulmohsen", "label": "Talib Al-Abdulmohsen", "shape": "dot", "size": 10, "title": "ORG"}, {"color": "#97c2fc", "id": "atheist \u0026 Ex-Muslim", "label": "atheist \u0026 Ex-Muslim", "shape": "dot", "size": 10, "title": "ORG"}, {"color": "#97c2fc", "id": "Saudi", "label": "Saudi", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "2006", "label": "2006", "shape": "dot", "size": 10, "title": "DATE"}, {"color": "#97c2fc", "id": "Anti-Islam", "label": "Anti-Islam", "shape": "dot", "size": 10, "title": "LAW"}, {"color": "#97c2fc", "id": "germans", "label": "germans", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "Saudi Arabia", "label": "Saudi Arabia", "shape": "dot", "size": 10, "title": "GPE"}, {"color": "#97c2fc", "id": "Gulf", "label": "Gulf", "shape": "dot", "size": 10, "title": "LOC"}, {"color": "#97c2fc", "id": "EU", "label": "EU", "shape": "dot", "size": 10, "title": "ORG"}, {"color": "#97c2fc", "id": "@NEWSMAX\u2019s American Agenda", "label": "@NEWSMAX\u2019s American Agenda", "shape": "dot", "size": 10, "title": "ORG"}, {"color": "#97c2fc", "id": "@KatrinaSzish", "label": "@KatrinaSzish", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "Americans", "label": "Americans", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "Biden", "label": "Biden", "shape": "dot", "size": 10, "title": "PERSON"}, {"color": "#97c2fc", "id": "as many as 1000", "label": "as many as 1000", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "Islamist", "label": "Islamist", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "Judeo-Christian", "label": "Judeo-Christian", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "FBI", "label": "FBI", "shape": "dot", "size": 10, "title": "ORG"}, {"color": "#97c2fc", "id": "this Christmas season", "label": "this Christmas season", "shape": "dot", "size": 10, "title": "DATE"}, {"color": "#97c2fc", "id": "West", "label": "West", "shape": "dot", "size": 10, "title": "LOC"}, {"color": "#97c2fc", "id": "11", "label": "11", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "Magdenburg", "label": "Magdenburg", "shape": "dot", "size": 10, "title": "GPE"}, {"color": "#97c2fc", "id": "\ud83c\uddf8", "label": "\ud83c\uddf8", "shape": "dot", "size": 10, "title": "PERSON"}, {"color": "#97c2fc", "id": "#", "label": "#", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "20", "label": "20", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "two", "label": "two", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "germany", "label": "germany", "shape": "dot", "size": 10, "title": "GPE"}, {"color": "#97c2fc", "id": "muslim", "label": "muslim", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "Syria", "label": "Syria", "shape": "dot", "size": 10, "title": "GPE"}, {"color": "#97c2fc", "id": "Godly", "label": "Godly", "shape": "dot", "size": 10, "title": "PERSON"}, {"color": "#97c2fc", "id": "Madgeburg", "label": "Madgeburg", "shape": "dot", "size": 10, "title": "PERSON"}, {"color": "#97c2fc", "id": "SAUDI", "label": "SAUDI", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "1974", "label": "1974", "shape": "dot", "size": 10, "title": "DATE"}, {"color": "#97c2fc", "id": "Terrorist Attack", "label": "Terrorist Attack", "shape": "dot", "size": 10, "title": "PERSON"}, {"color": "#97c2fc", "id": "UPDATE Germany", "label": "UPDATE Germany", "shape": "dot", "size": 10, "title": "GPE"}, {"color": "#97c2fc", "id": "Islam", "label": "Islam", "shape": "dot", "size": 10, "title": "ORG"}, {"color": "#97c2fc", "id": "Islamic", "label": "Islamic", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "100%", "label": "100%", "shape": "dot", "size": 10, "title": "PERCENT"}, {"color": "#97c2fc", "id": "CHRISTMAS", "label": "CHRISTMAS", "shape": "dot", "size": 10, "title": "DATE"}, {"color": "#97c2fc", "id": "dozens", "label": "dozens", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "BMW", "label": "BMW", "shape": "dot", "size": 10, "title": "ORG"}, {"color": "#97c2fc", "id": "anti-islam", "label": "anti-islam", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "Reddit", "label": "Reddit", "shape": "dot", "size": 10, "title": "GPE"}, {"color": "#97c2fc", "id": "IRAN", "label": "IRAN", "shape": "dot", "size": 10, "title": "GPE"}, {"color": "#97c2fc", "id": "WEST BERLIN", "label": "WEST BERLIN", "shape": "dot", "size": 10, "title": "GPE"}, {"color": "#97c2fc", "id": "EXPLODED", "label": "EXPLODED", "shape": "dot", "size": 10, "title": "ORG"}, {"color": "#97c2fc", "id": "APRIL 5 1986", "label": "APRIL 5 1986", "shape": "dot", "size": 10, "title": "DATE"}, {"color": "#97c2fc", "id": "FORCE AMERICA", "label": "FORCE AMERICA", "shape": "dot", "size": 10, "title": "ORG"}, {"color": "#97c2fc", "id": "Trump", "label": "Trump", "shape": "dot", "size": 10, "title": "ORG"}, {"color": "#97c2fc", "id": "https://t.co/jRvjIQ62ob", "label": "https://t.co/jRvjIQ62ob", "shape": "dot", "size": 10, "title": "PERSON"}, {"color": "#97c2fc", "id": "ZIONIST atheist \u0026amp", "label": "ZIONIST atheist \u0026amp", "shape": "dot", "size": 10, "title": "ORG"}, {"color": "#97c2fc", "id": "Ex-Muslim", "label": "Ex-Muslim", "shape": "dot", "size": 10, "title": "ORG"}, {"color": "#97c2fc", "id": "https://t.co/DbfJDFpSBQ", "label": "https://t.co/DbfJDFpSBQ", "shape": "dot", "size": 10, "title": "PERSON"}, {"color": "#97c2fc", "id": "https://t.co/J26UPYdLty Reports", "label": "https://t.co/J26UPYdLty Reports", "shape": "dot", "size": 10, "title": "PERSON"}, {"color": "#97c2fc", "id": "TWO", "label": "TWO", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "One", "label": "One", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "At least 11", "label": "At least 11", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "1", "label": "1", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "50-year-old", "label": "50-year-old", "shape": "dot", "size": 10, "title": "DATE"}, {"color": "#97c2fc", "id": "Palestinians", "label": "Palestinians", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "Al Qaeda/HTS", "label": "Al Qaeda/HTS", "shape": "dot", "size": 10, "title": "ORG"}, {"color": "#97c2fc", "id": "Ukraine", "label": "Ukraine", "shape": "dot", "size": 10, "title": "GPE"}, {"color": "#97c2fc", "id": "RIP", "label": "RIP", "shape": "dot", "size": 10, "title": "ORG"}, {"color": "#97c2fc", "id": "ISIS/Mossad", "label": "ISIS/Mossad", "shape": "dot", "size": 10, "title": "ORG"}, {"color": "#97c2fc", "id": "African", "label": "African", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "tonight", "label": "tonight", "shape": "dot", "size": 10, "title": "TIME"}, {"color": "#97c2fc", "id": "this evening", "label": "this evening", "shape": "dot", "size": 10, "title": "TIME"}, {"color": "#97c2fc", "id": "German", "label": "German", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "Terrorist", "label": "Terrorist", "shape": "dot", "size": 10, "title": "PERSON"}, {"color": "#97c2fc", "id": "christian", "label": "christian", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "Magderburg", "label": "Magderburg", "shape": "dot", "size": 10, "title": "GPE"}, {"color": "#97c2fc", "id": "islam", "label": "islam", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "\ud83c\udde9\ud83c\uddea Latest", "label": "\ud83c\udde9\ud83c\uddea Latest", "shape": "dot", "size": 10, "title": "ORG"}, {"color": "#97c2fc", "id": "34", "label": "34", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "4", "label": "4", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "50 year-old", "label": "50 year-old", "shape": "dot", "size": 10, "title": "DATE"}, {"color": "#97c2fc", "id": "Second", "label": "Second", "shape": "dot", "size": 10, "title": "ORDINAL"}, {"color": "#97c2fc", "id": "second", "label": "second", "shape": "dot", "size": 10, "title": "ORDINAL"}, {"color": "#97c2fc", "id": "Chris Murphy", "label": "Chris Murphy", "shape": "dot", "size": 10, "title": "PERSON"}, {"color": "#97c2fc", "id": "\ud83e\udd14", "label": "\ud83e\udd14", "shape": "dot", "size": 10, "title": "PERSON"}, {"color": "#97c2fc", "id": "At least one", "label": "At least one", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "one", "label": "one", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "\ud83c\udde9\ud83c\uddeaGermany", "label": "\ud83c\udde9\ud83c\uddeaGermany", "shape": "dot", "size": 10, "title": "GPE"}, {"color": "#97c2fc", "id": "Jesus Christ", "label": "Jesus Christ", "shape": "dot", "size": 10, "title": "PERSON"}, {"color": "#97c2fc", "id": "Prophet", "label": "Prophet", "shape": "dot", "size": 10, "title": "PERSON"}, {"color": "#97c2fc", "id": "only one", "label": "only one", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "Mary \u0026amp", "label": "Mary \u0026amp", "shape": "dot", "size": 10, "title": "ORG"}, {"color": "#97c2fc", "id": "3rd", "label": "3rd", "shape": "dot", "size": 10, "title": "ORDINAL"}, {"color": "#97c2fc", "id": "at least 11", "label": "at least 11", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "68", "label": "68", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "15", "label": "15", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "2", "label": "2", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "more than 60", "label": "more than 60", "shape": "dot", "size": 10, "title": "CARDINAL"}, {"color": "#97c2fc", "id": "Israeli", "label": "Israeli", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "5th", "label": "5th", "shape": "dot", "size": 10, "title": "ORDINAL"}, {"color": "#97c2fc", "id": "the beginning of season", "label": "the beginning of season", "shape": "dot", "size": 10, "title": "DATE"}, {"color": "#97c2fc", "id": "jihadist", "label": "jihadist", "shape": "dot", "size": 10, "title": "NORP"}, {"color": "#97c2fc", "id": "\ud83c\udde9\ud83c\uddea Europe", "label": "\ud83c\udde9\ud83c\uddea Europe", "shape": "dot", "size": 10, "title": "ORG"}, {"color": "#97c2fc", "id": "RELIGION DIFFERENCE", "label": "RELIGION DIFFERENCE", "shape": "dot", "size": 10, "title": "PERSON"}]);
+                  edges = new vis.DataSet([{"from": "Christians", "to": "targeting", "width": 1}, {"from": "Magdeburg", "to": "bite", "width": 1}, {"from": "Germany", "to": "refused", "width": 1}, {"from": "Germany", "to": "blames", "width": 1}, {"from": "Germany", "to": "trying", "width": 1}, {"from": "Germany", "to": "blame", "width": 1}, {"from": "Germany", "to": "supports", "width": 1}, {"from": "Israel", "to": "supports", "width": 1}, {"from": "60", "to": "injuring", "width": 1}, {"from": "muslims", "to": "hates", "width": 1}, {"from": "CCTV", "to": "watch", "width": 1}, {"from": "Europe", "to": "islamize", "width": 1}, {"from": "Europe", "to": "needs", "width": 1}, {"from": "Nazis", "to": "supports", "width": 1}, {"from": "Muslims", "to": "revere", "width": 1}, {"from": "Jesus", "to": "hate", "width": 1}, {"from": "heart", "to": "goes", "width": 1}, {"from": "heart", "to": "breaking", "width": 1}, {"from": "I", "to": "end", "width": 1}, {"from": "I", "to": "stand", "width": 1}, {"from": "I", "to": "seen", "width": 1}, {"from": "I", "to": "wonder", "width": 1}, {"from": "persecution", "to": "end", "width": 1}, {"from": "https://t.co/6o7ZZU00n5", "to": "invaded", "width": 1}, {"from": "group", "to": "invaded", "width": 1}, {"from": "market", "to": "invaded", "width": 1}, {"from": "terrorist", "to": "used", "width": 1}, {"from": "terrorist", "to": "kept", "width": 1}, {"from": "terrorist", "to": "provoked", "width": 1}, {"from": "car", "to": "used", "width": 1}, {"from": "car", "to": "drove", "width": 1}, {"from": "car", "to": "ran", "width": 1}, {"from": "car", "to": "say", "width": 1}, {"from": "people", "to": "kill", "width": 1}, {"from": "people", "to": "killing", "width": 1}, {"from": "people", "to": "attack", "width": 1}, {"from": "people", "to": "hit", "width": 1}, {"from": "hand", "to": "bite", "width": 1}, {"from": "that", "to": "feeds", "width": 1}, {"from": "that", "to": "drove", "width": 1}, {"from": "that", "to": "hates", "width": 1}, {"from": "that", "to": "wants", "width": 1}, {"from": "that", "to": "supports", "width": 1}, {"from": "that", "to": "happened", "width": 1}, {"from": "you", "to": "feeds", "width": 1}, {"from": "you", "to": "attack", "width": 1}, {"from": "you", "to": "bite", "width": 1}, {"from": "you", "to": "know", "width": 1}, {"from": "you", "to": "agree", "width": 1}, {"from": "who", "to": "supports", "width": 1}, {"from": "who", "to": "lived", "width": 1}, {"from": "who", "to": "hate", "width": 1}, {"from": "K", "to": "\ufe0f#BREAKING", "width": 1}, {"from": "attack", "to": "ramming", "width": 1}, {"from": "attack", "to": "has", "width": 1}, {"from": "attack", "to": "says", "width": 1}, {"from": "attack", "to": "committing", "width": 1}, {"from": "attack", "to": "unfolds", "width": 1}, {"from": "attack", "to": "showing", "width": 1}, {"from": "Abdulmohsen", "to": "identified", "width": 1}, {"from": "he", "to": "lived", "width": 1}, {"from": "he", "to": "blames", "width": 1}, {"from": "he", "to": "believes", "width": 1}, {"from": "He", "to": "expresses", "width": 1}, {"from": "tendencies", "to": "expresses", "width": 1}, {"from": "girls", "to": "smuggling", "width": 1}, {"from": "him", "to": "extradite", "width": 1}, {"from": "asylum", "to": "granted", "width": 1}, {"from": "\ud83c\uddea", "to": "give", "width": 1}, {"from": "\ud83c\uddea", "to": "Watch", "width": 1}, {"from": "pause", "to": "give", "width": 1}, {"from": "administration", "to": "allowed", "width": 1}, {"from": "terrorists", "to": "allowed", "width": 1}, {"from": "terrorists", "to": "supports", "width": 1}, {"from": "hallmarks", "to": "has", "width": 1}, {"from": "war", "to": "has", "width": 1}, {"from": "@Kash_Patel", "to": "have", "width": 1}, {"from": "work", "to": "cut", "width": 1}, {"from": "what", "to": "means", "width": 1}, {"from": "what", "to": "thinks", "width": 1}, {"from": "intifada", "to": "globalize", "width": 1}, {"from": "This", "to": "has", "width": 1}, {"from": "This", "to": "appears", "width": 1}, {"from": "This", "to": "STOP", "width": 1}, {"from": "place", "to": "has", "width": 1}, {"from": "place", "to": "taking", "width": 1}, {"from": "We", "to": "need", "width": 1}, {"from": "We", "to": "know", "width": 1}, {"from": "system", "to": "change", "width": 1}, {"from": "media", "to": "says", "width": 1}, {"from": "media", "to": "hate", "width": 1}, {"from": "You", "to": "hate", "width": 1}, {"from": "You", "to": "need", "width": 1}, {"from": "You", "to": "let", "width": 1}, {"from": "border", "to": "\u2019s", "width": 1}, {"from": "religion", "to": "guess", "width": 1}, {"from": "me", "to": "get", "width": 1}, {"from": "me", "to": "reminds", "width": 1}, {"from": "this", "to": "get", "width": 1}, {"from": "this", "to": "reminds", "width": 1}, {"from": "this", "to": "prevent", "width": 1}, {"from": "footage", "to": "Watch", "width": 1}, {"from": "footage", "to": "shows", "width": 1}, {"from": "footage", "to": "emerged", "width": 1}, {"from": "sources", "to": "claim", "width": 1}, {"from": "Thoughts", "to": "go", "width": 1}, {"from": "location", "to": "shows", "width": 1}, {"from": "they", "to": "blame", "width": 1}, {"from": "they", "to": "turn", "width": 1}, {"from": "they", "to": "want", "width": 1}, {"from": "they", "to": "say", "width": 1}, {"from": "they", "to": "\u2019re", "width": 1}, {"from": "they", "to": "laugh", "width": 1}, {"from": "BELLE", "to": "DISCOTHEQUE", "width": 1}, {"from": "AMERICA", "to": "FORCE", "width": 1}, {"from": "LIBYA", "to": "DESTROY", "width": 1}, {"from": "it", "to": "brings", "width": 1}, {"from": "it", "to": "going", "width": 1}, {"from": "it", "to": "provoked", "width": 1}, {"from": "it", "to": "investigating", "width": 1}, {"from": "It", "to": "\u2019s", "width": 1}, {"from": "@elonmusk", "to": "https://t.co/3meuIqGJGf", "width": 1}, {"from": "migrants", "to": "feed", "width": 1}, {"from": "Reports", "to": "stating", "width": 1}, {"from": "genocide", "to": "supports", "width": 1}, {"from": "immigration", "to": "supports", "width": 1}, {"from": "Terrorism", "to": "come", "width": 1}, {"from": "floodgate", "to": "keeping", "width": 1}, {"from": "daughters", "to": "raped", "width": 1}, {"from": "children", "to": "slaughtered", "width": 1}, {"from": "Merkel", "to": "sleeps", "width": 1}, {"from": "fine", "to": "sleeps", "width": 1}, {"from": "WHY", "to": "Why!#Terroristattack", "width": 1}, {"from": "vehicle", "to": "unfolds", "width": 1}, {"from": "authorities", "to": "say", "width": 1}, {"from": "we", "to": "investigating", "width": 1}, {"from": "incident", "to": "investigating", "width": 1}, {"from": "inmigration", "to": "Stop", "width": 1}, {"from": "Murphy", "to": "thinks", "width": 1}, {"from": "prayers", "to": "Sending", "width": 1}, {"from": "https://t.co/My6INOkNWX", "to": "Let", "width": 1}, {"from": "\u0027s", "to": "get", "width": 1}, {"from": "thing", "to": "get", "width": 1}, {"from": "Christ", "to": "revere", "width": 1}, {"from": "Prayers", "to": "affected", "width": 1}, {"from": "Tragedy", "to": "affected", "width": 1}, {"from": "Authorities", "to": "investigating", "width": 1}, {"from": "identity", "to": "remain", "width": 1}, {"from": "Police", "to": "arrest", "width": 1}, {"from": "doctor", "to": "arrest", "width": 1}, {"from": "case", "to": "emerged", "width": 1}, {"from": "borders", "to": "needs", "width": 1}, {"from": "HUMANS", "to": "EXECUTING", "width": 1}]);
+
+                  nodeColors = {};
+                  allNodes = nodes.get({ returnType: "Object" });
+                  for (nodeId in allNodes) {
+                    nodeColors[nodeId] = allNodes[nodeId].color;
+                  }
+                  allEdges = edges.get({ returnType: "Object" });
+                  // adding nodes and edges to the graph
+                  data = {nodes: nodes, edges: edges};
+
+                  var options = {
+    "configure": {
+        "enabled": false
+    },
+    "edges": {
+        "color": {
+            "inherit": true
+        },
+        "smooth": {
+            "enabled": true,
+            "type": "dynamic"
+        }
+    },
+    "interaction": {
+        "dragNodes": true,
+        "hideEdgesOnDrag": false,
+        "hideNodesOnDrag": false
+    },
+    "physics": {
+        "enabled": true,
+        "stabilization": {
+            "enabled": true,
+            "fit": true,
+            "iterations": 1000,
+            "onlyDynamicEdges": false,
+            "updateInterval": 50
+        }
+    }
+};
+
+                  
+
+
+                  
+
+                  network = new vis.Network(container, data, options);
+
+                  
+
+                  
+
+                  
+
+
+                  
+                      network.on("stabilizationProgress", function(params) {
+                          document.getElementById('loadingBar').removeAttribute("style");
+                          var maxWidth = 496;
+                          var minWidth = 20;
+                          var widthFactor = params.iterations/params.total;
+                          var width = Math.max(minWidth,maxWidth * widthFactor);
+                          document.getElementById('bar').style.width = width + 'px';
+                          document.getElementById('text').innerHTML = Math.round(widthFactor*100) + '%';
+                      });
+                      network.once("stabilizationIterationsDone", function() {
+                          document.getElementById('text').innerHTML = '100%';
+                          document.getElementById('bar').style.width = '496px';
+                          document.getElementById('loadingBar').style.opacity = 0;
+                          // really clean the dom element
+                          setTimeout(function () {document.getElementById('loadingBar').style.display = 'none';}, 500);
+                      });
+                  
+
+                  return network;
+
+              }
+              drawGraph();
+        </script>
+    </body>
+</html>
