@@ -1,6 +1,6 @@
 # Streamlit App: Crisis Forecasting Tool
 
-This project is part of Omdena's initiative to build a custom workflow leveraging AI-powered tools for real-time crisis forecasting.
+This project is part of ACAPS initiative to build a custom workflow leveraging AI-powered tools for real-time crisis forecasting.
 
 ## Table of Contents
 1. [Features](#features)
